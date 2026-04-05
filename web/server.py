@@ -15,6 +15,7 @@ from pathlib import Path
 PORT = 5555
 WEB_DIR = Path(__file__).parent
 FIRETV_IP = os.environ["FIRETV_IP"]
+FIRETV_AUTH = os.environ.get("FIRETV_AUTH", "")
 
 
 def log(msg):
@@ -55,8 +56,24 @@ class RemoteHandler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(WEB_DIR), **kwargs)
 
+    def _auth_ok(self):
+        if not FIRETV_AUTH:
+            return True
+        return self.headers.get("X-FireTV-Auth") == FIRETV_AUTH
+
+    def do_GET(self):
+        if not self._auth_ok():
+            self.send_error(403, "Forbidden")
+            return
+        super().do_GET()
+
     def do_POST(self):
         log(f"[http] POST {self.path} von {self.client_address[0]}")
+
+        if not self._auth_ok():
+            log("[http] Authentifizierung fehlgeschlagen")
+            self.send_error(403, "Forbidden")
+            return
 
         if self.path != "/keyevent":
             self.send_error(404)

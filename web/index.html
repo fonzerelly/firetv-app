@@ -160,6 +160,23 @@
   <div id="status"></div>
 
   <script>
+    // Token aus URL-Parameter lesen und sofort aus dem Browserverlauf entfernen
+    const params = new URLSearchParams(window.location.search);
+    const authToken = params.get('firetvauth') || sessionStorage.getItem('firetvauth') || '';
+    if (authToken) {
+      sessionStorage.setItem('firetvauth', authToken);
+      params.delete('firetvauth');
+      const cleanUrl = window.location.pathname + (params.size ? '?' + params : '');
+      history.replaceState(null, '', cleanUrl);
+    }
+
+    function authHeaders() {
+      return {
+        'Content-Type': 'application/json',
+        ...(authToken ? { 'X-FireTV-Auth': authToken } : {}),
+      };
+    }
+
     const status = document.getElementById('status');
 
     function showStatus(ok, text) {
@@ -172,7 +189,7 @@
       try {
         const res = await fetch('/keyevent', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: authHeaders(),
           body: JSON.stringify({ keycode }),
         });
         const data = await res.json();
@@ -186,7 +203,7 @@
       try {
         const res = await fetch('/keyevent', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: authHeaders(),
           body: JSON.stringify({ app }),
         });
         const data = await res.json();

@@ -13,7 +13,8 @@ echo "Baue Docker-Image..."
 docker build -t firetv-remote "$SCRIPT_DIR"
 
 echo "Starte Container (WebUI: http://localhost:5555)..."
-docker run --rm \
+docker run --restart unless-stopped --detach \
   -e FIRETV_IP="$FIRETV_IP" \
+  ${FIRETV_AUTH:+-e FIRETV_AUTH="$FIRETV_AUTH"} \
   -p 5555:5555 \
   firetv-remote

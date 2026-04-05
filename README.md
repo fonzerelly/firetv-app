@@ -32,10 +32,16 @@ Beim ersten Verbindungsaufbau erscheint auf dem TV-Bildschirm ein Dialog „RSA-
 ## Starten
 
 ```bash
-FIRETV_IP=192.168.1.x ./start.sh
+FIRETV_IP=192.168.1.x FIRETV_AUTH=meinpasswort ./start.sh
 ```
 
-Die Web-Oberfläche ist danach unter [http://localhost:5555](http://localhost:5555) erreichbar.
+Die Web-Oberfläche ist danach erreichbar unter:
+
+```
+http://server:5555/?firetvauth=meinpasswort
+```
+
+Der Token wird beim ersten Aufruf aus der URL entfernt und in der Browser-Session gespeichert — er taucht also nicht dauerhaft im Verlauf auf. Ohne `FIRETV_AUTH` läuft der Server ohne Authentifizierung.
 
 ## Hilfsskripte
 
