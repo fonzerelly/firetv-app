@@ -168,6 +168,8 @@
       params.delete('firetvauth');
       const cleanUrl = window.location.pathname + (params.size ? '?' + params : '');
       history.replaceState(null, '', cleanUrl);
+    } else {
+      document.body.innerHTML = '<p style="color:#e94560;font-family:sans-serif;text-align:center;margin-top:20vh">Kein Authentifizierungstoken angegeben.<br>Bitte URL mit <code>?firetvauth=...</code> aufrufen.</p>';
     }
 
     function authHeaders() {

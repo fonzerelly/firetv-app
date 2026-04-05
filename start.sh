@@ -3,7 +3,13 @@ set -euo pipefail
 
 if [ -z "${FIRETV_IP:-}" ]; then
   echo "Fehler: Umgebungsvariable FIRETV_IP ist nicht gesetzt."
-  echo "Aufruf: FIRETV_IP=192.168.x.x ./start.sh"
+  echo "Aufruf: FIRETV_IP=192.168.x.x FIRETV_AUTH=geheim ./start.sh"
+  exit 1
+fi
+
+if [ -z "${FIRETV_AUTH:-}" ]; then
+  echo "Fehler: Umgebungsvariable FIRETV_AUTH ist nicht gesetzt."
+  echo "Aufruf: FIRETV_IP=192.168.x.x FIRETV_AUTH=geheim ./start.sh"
   exit 1
 fi
 
