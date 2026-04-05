@@ -15,9 +15,6 @@ fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-echo "Baue Docker-Image..."
-docker build -t firetv-remote "$SCRIPT_DIR"
-
 echo "Öffne Port 5555 in ufw..."
 sudo ufw allow 5555
 

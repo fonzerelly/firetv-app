@@ -60,9 +60,8 @@ class RemoteHandler(http.server.SimpleHTTPRequestHandler):
         return self.headers.get("X-FireTV-Auth") == FIRETV_AUTH
 
     def do_GET(self):
-        if not self._auth_ok():
-            self.send_error(403, "Forbidden")
-            return
+        # Statische Dateien ohne Auth ausliefern — der Token wird erst vom
+        # JS in index.html aus der URL gelesen und dann bei API-Calls mitgeschickt.
         super().do_GET()
 
     def do_POST(self):
